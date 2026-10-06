@@ -1,0 +1,22 @@
+{
+  "id": "offers",
+  "name": "Offers near you",
+  "icon": "🏷️",
+  "accent": "#b45309",
+  "description": "Local discount bait. High click-through, low effort — good for a first campaign.",
+  "requires_brand_authorization": false,
+  "content": {
+    "en": {
+      "title": "Offers near you",
+      "headline": "3 discounts expire tonight",
+      "sub": "Shops within walking distance have released same-day vouchers. Show your location to reveal them.",
+      "cta": "Show offers near me"
+    },
+    "ar": {
+      "title": "عروض قريبة منك",
+      "headline": "ثلاثة خصومات تنتهي الليلة",
+      "sub": "متاجر على بُعد دقائق منك أطلقت قسائم تُستخدم اليوم فقط. شارك موقعك لعرضها.",
+      "cta": "اعرض العروض القريبة"
+    }
+  }
+}

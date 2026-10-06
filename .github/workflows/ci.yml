@@ -2,28 +2,44 @@ name: ci
 
 on:
   push:
-    branches:
-      - 'master'
+    branches: ['**']
+  pull_request:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: No third-party dependencies are required
+        run: python3 -c "import sys; print(sys.version)"
+      - name: Syntax check console assets
+        run: node --check web/app.js && node --check web/runtime.js
+      - name: Doctor
+        run: python3 seeker.py doctor
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: CLI smoke test
+        run: |
+          python3 seeker.py scenarios
+          python3 seeker.py analyze tests/fixtures/deceptive.html
+          python3 seeker.py analyze tests/fixtures/benign.html
+          python3 seeker.py ledger verify
+
   docker:
     runs-on: ubuntu-latest
+    needs: test
     steps:
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      -
-        name: Login to DockerHub
-        uses: docker/login-action@v2
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image
+        uses: docker/build-push-action@v5
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: thewhiteh4t/seeker:latest
+          push: false
+          tags: seeker:ci

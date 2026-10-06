@@ -1,0 +1,22 @@
+{
+  "id": "survey",
+  "name": "Transparent survey (control group)",
+  "icon": "📋",
+  "accent": "#7c3aed",
+  "description": "Fully labelled simulation page used as a control: states up-front that it is a training exercise.",
+  "requires_brand_authorization": false,
+  "content": {
+    "en": {
+      "title": "Security awareness survey",
+      "headline": "Two questions, then you are done",
+      "sub": "This is a security awareness exercise run by your organisation. We would like to know whether a location request like this one would get approved.",
+      "cta": "Start the survey"
+    },
+    "ar": {
+      "title": "استبيان التوعية الأمنية",
+      "headline": "سؤالان فقط وينتهي الأمر",
+      "sub": "هذا تمرين توعية أمنية تنفّذه مؤسستك. نريد أن نعرف إن كان طلب موقع مثل هذا سيُقبل أم لا.",
+      "cta": "ابدأ الاستبيان"
+    }
+  }
+}

@@ -1,3 +1,21 @@
+# v1 artefacts
 db/
 logs/
 template/__pycache__/
+
+# v2: runtime state (campaigns, events, signing key, api token)
+data/
+*.db
+*.db-wal
+*.db-shm
+.api_token
+.signing_key
+exports/
+
+# python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/

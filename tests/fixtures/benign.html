@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Branch locator — Northwind Bakery</title>
+  <meta name="description" content="Find the bakery closest to you.">
+</head>
+<body>
+  <main>
+    <h1>Find your nearest bakery</h1>
+    <p>
+      We use your location only to sort branches by distance. See our
+      <a href="/privacy">privacy policy</a> and <a href="/contact">contact us</a>.
+      Consent can be withdrawn at any time; the approximate area is cached for
+      five minutes and never leaves your browser.
+    </p>
+    <button id="locate">Use my location</button>
+    <ul id="list"></ul>
+  </main>
+<script>
+  document.getElementById('locate').addEventListener('click', function () {
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lat = pos.coords.latitude.toFixed(1);
+      var lon = pos.coords.longitude.toFixed(1);
+      render(sortByDistance(branches, lat, lon));
+    }, function () {
+      document.getElementById('list').textContent = 'Could not get your location.';
+    }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 });
+  });
+</script>
+</body>
+</html>

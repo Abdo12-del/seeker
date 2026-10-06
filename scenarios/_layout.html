@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}" dir="{{DIR}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>{{TITLE}}</title>
+<style>
+  :root { --accent: {{ACCENT}}; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: system-ui, -apple-system, "Segoe UI",
+    "Noto Kufi Arabic", Tahoma, sans-serif;
+    background: radial-gradient(1000px 500px at 50% -10%, #1e293b, #0b1220 60%);
+    color: #e5e7eb; display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .card {
+    width: 100%; max-width: 460px; background: #0f172a; border: 1px solid #1f2937;
+    border-radius: 18px; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,.45);
+  }
+  .icon { font-size: 40px; line-height: 1; }
+  h1 { font-size: 21px; margin: 14px 0 6px; }
+  p.sub { margin: 0 0 20px; color: #94a3b8; font-size: 14px; line-height: 1.7; }
+  button {
+    font: inherit; cursor: pointer; border-radius: 12px; padding: 13px 18px; border: 0;
+    width: 100%; font-weight: 600;
+  }
+  .primary { background: var(--accent); color: #fff; }
+  .primary:hover { filter: brightness(1.12); }
+  .ghost { background: transparent; color: #94a3b8; border: 1px solid #243044; margin-top: 10px; }
+  .ghost:hover { color: #e5e7eb; border-color: #334155; }
+  .linkish {
+    background: none; border: 0; color: #64748b; font-size: 12px; width: auto;
+    margin: 18px auto 0; display: block; text-decoration: underline; padding: 4px;
+  }
+  .mask {
+    position: fixed; inset: 0; background: rgba(2,6,23,.82); display: none;
+    align-items: center; justify-content: center; padding: 20px; z-index: 40;
+  }
+  .mask.open { display: flex; }
+  .sheet {
+    background: #0b1220; border: 1px solid #1f2937; border-radius: 16px; padding: 22px;
+    max-width: 440px; width: 100%; max-height: 88vh; overflow: auto;
+  }
+  .sheet h2 { font-size: 17px; margin: 0 0 12px; }
+  .notice {
+    font-size: 13px; line-height: 1.9; color: #cbd5e1; background: #0f172a;
+    border: 1px solid #1f2937; border-radius: 12px; padding: 14px; white-space: pre-wrap;
+  }
+  .meta { font-size: 12px; color: #64748b; margin-top: 12px; line-height: 1.8; }
+  .row { display: flex; gap: 10px; margin-top: 18px; }
+  .row button { flex: 1; }
+  .tips { margin: 14px 0 0; padding-inline-start: 20px; color: #cbd5e1; font-size: 13.5px; line-height: 1.9; }
+  .badge {
+    display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 999px;
+    background: #13233a; color: #7dd3fc; border: 1px solid #1e3a5f; margin-bottom: 12px;
+  }
+  .ok { color: #34d399; } .bad { color: #f87171; }
+  footer { text-align: center; color: #475569; font-size: 11.5px; margin-top: 18px; }
+</style>
+</head>
+<body>
+  <main class="card" id="lure">
+    <div class="icon">{{ICON}}</div>
+    <h1>{{HEADLINE}}</h1>
+    <p class="sub">{{SUB}}</p>
+    {{BODY}}
+    <button class="primary" id="cta">{{CTA}}</button>
+    <button class="ghost" id="reportBtn">{{BTN_REPORT}}</button>
+    <footer>{{ORG}} · <span id="precisionNote">precision: {{PRECISION_LABEL}}</span></footer>
+  </main>
+
+  <div class="mask" id="consentMask">
+    <div class="sheet">
+      <span class="badge">{{NOTICE_TITLE}}</span>
+      <h2>{{NOTICE_TITLE}}</h2>
+      <div class="notice">{{NOTICE}}</div>
+      <div class="meta">Stored precision: {{PRECISION_LABEL}} · retention {{RETENTION_DAYS}} days</div>
+      <div class="row">
+        <button class="ghost" id="denyBtn">{{BTN_DENY}}</button>
+        <button class="primary" id="allowBtn">{{BTN_ALLOW}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mask" id="revealMask">
+    <div class="sheet">
+      <span class="badge">{{APP_BADGE}}</span>
+      <h2 id="revealTitle"></h2>
+      <p class="sub" id="revealBody"></p>
+      <ul class="tips" id="revealTips"></ul>
+      <div class="row"><button class="primary" id="closeReveal">{{BTN_BACK}}</button></div>
+    </div>
+  </div>
+
+<script>window.SEEKER = {
+  token: "{{TOKEN}}", campaign: "{{CAMPAIGN}}", session: "{{SESSION}}",
+  scenario: "{{SCENARIO}}", lang: "{{LANG}}", strings: {{STRINGS}}
+};</script>
+<script src="/static/runtime.js"></script>
+</body>
+</html>

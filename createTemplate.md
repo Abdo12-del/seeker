@@ -1,39 +1,81 @@
-# How-to create template
+# Writing a scenario (v2)
 
-Once your template is working perfect, do not forget to submit it to the community via a Pull Request!
-
-## HTML Files
-You are free to implement any HTML + CSS files to get the look and feel you want, however, do not forget to do the bridge with the core javascript part described in the next section.
-
-## Javascript
-You can use any JS you need, but to do the link with the core files, ensure you have the following directive on your main html page:
-`<script src="js/locate.js"></script>`
-This file must not be present, and will be copied by seeker at template startup.
-
-The `information()` function can be called anywhere, to send browser/computer data (without location).
-
-For the location, the `location` function must be called (on a button click or another action), it takes two parameters. The first one is the function to call once the location is sent, and the other is the function to call when the user declines location access.
+This file replaces the v1 "create a template" instructions. In v2 a page is a
+**scenario**: a directory with a `manifest.json`, rendered through
+`scenarios/_layout.html`.
 
 ```
-<a class="tgme_action_button_new" onclick="locate(popup, function(){$('#change').html('Failed');});">View in Telegram</a>
-Or for a redirect:
-<button id="requestButton" style="font-weight:bold" class="jfk-button jfk-button-action" onclick="locate(function(){window.location='REDIRECT_URL';}, function(){$('#change').html('Failed');});">Request access</button>
+scenarios/
+  _layout.html          shared chrome: lure card, consent sheet, teach-back
+  delivery/manifest.json
+  wifi/manifest.json
+  offers/manifest.json
+  survey/manifest.json
 ```
 
-## Template files
-There is a unique `templates.json` file, add another entry to this file, at the end.
-```        
-        ,
-        {
-            "name": "Your template name",
-            "dir_name": "folder where your template code is",
-            "import_file": "mod_yourtemplate"
-        }
+`web/runtime.js` is injected into every page and drives the flow:
+
+```
+page render  → POST /ingest/device   (sanitized by the privacy policy)
+             → POST /ingest/open
+CTA click    → POST /ingest/consent_prompt
+             → consent sheet is shown  ← the notice, before any browser prompt
+  allow      → POST /ingest/consent {granted}
+             → navigator.geolocation.getCurrentPosition(...)
+             → POST /ingest/location   (degraded by the precision policy)
+  deny       → POST /ingest/consent {denied} → teach-back
+report       → POST /ingest/report  {reason} → teach-back
 ```
 
-## Python file
-In the `template` folder, you will find a set of mod_*.py file, you can copy and adapt an existing one and report the name in the `templates.json` file described above.
-This python file is used to replace variables, and prepare files at template startup.
+## manifest.json
 
-## PHP file
-PHP side is managed by seeker, do not include any PHP file
+```json
+{
+  "id": "delivery",
+  "name": "Delivery confirmation",
+  "icon": "📦",
+  "accent": "#0f766e",
+  "description": "What this scenario pretends to be, in one line.",
+  "requires_brand_authorization": false,
+  "body_file": "body.html",
+  "content": {
+    "ar": {"title": "…", "headline": "…", "sub": "…", "cta": "…"},
+    "en": {"title": "…", "headline": "…", "sub": "…", "cta": "…"}
+  }
+}
+```
+
+| field | meaning |
+|---|---|
+| `id` | directory name, used by `--scenario` |
+| `icon` / `accent` | emoji and brand colour for the card |
+| `requires_brand_authorization` | `true` if the page imitates a real brand — the engine then **refuses to serve it** unless the campaign's authorisation names that brand |
+| `body_file` | optional extra HTML injected above the CTA |
+| `content.<lang>` | `title`, `headline`, `sub`, `cta` per language |
+
+## Rules we hold ourselves to
+
+* **No real trademarks.** Shipped scenarios are generic: a parcel, a Wi-Fi
+  finder, a local offer, a labelled survey. If you need a brand page, that is a
+  licensing decision for the brand owner and for whoever signed the
+  authorisation, not for the scenario loader.
+* **The consent notice is not optional.** It is rendered from
+  `core/i18n.py` + `core/authz.py` and carries the operator name, the purpose,
+  the retention period and a contact address. You can change the wording; you
+  cannot remove it.
+* **No credential fields.** The layout has no form inputs by design.
+* **The teach-back always runs.** Every ending (shared, declined, reported)
+  explains what just happened — that moment is the whole point of the exercise.
+
+## Custom layout
+
+`_layout.html` supports these tokens:
+
+`{{LANG}} {{DIR}} {{TITLE}} {{HEADLINE}} {{SUB}} {{CTA}} {{BODY}} {{ICON}}
+{{ACCENT}} {{ORG}} {{CONTACT}} {{NOTICE}} {{NOTICE_TEXT}} {{NOTICE_TITLE}}
+{{BTN_ALLOW}} {{BTN_DENY}} {{BTN_REPORT}} {{BTN_BACK}} {{REPORT_PROMPT}}
+{{TOKEN}} {{CAMPAIGN}} {{SESSION}} {{PRECISION_LABEL}} {{RETENTION_DAYS}}
+{{STRINGS}} {{SCENARIO}} {{APP_BADGE}}`
+
+Anything you add must keep the `#consentMask` sheet and the
+`#cta` / `#allowBtn` / `#denyBtn` / `#reportBtn` ids that `runtime.js` binds to.

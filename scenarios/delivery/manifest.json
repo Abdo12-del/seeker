@@ -1,0 +1,22 @@
+{
+  "id": "delivery",
+  "name": "Delivery confirmation",
+  "icon": "📦",
+  "accent": "#0f766e",
+  "description": "A parcel needs a drop-off location. Generic, no real carrier branding.",
+  "requires_brand_authorization": false,
+  "content": {
+    "en": {
+      "title": "Delivery confirmation",
+      "headline": "We need your delivery location",
+      "sub": "A parcel addressed to you could not be delivered. Confirm where it should be dropped off and a courier will retry within 24 hours.",
+      "cta": "Confirm drop-off location"
+    },
+    "ar": {
+      "title": "تأكيد التوصيل",
+      "headline": "نحتاج موقع التوصيل",
+      "sub": "تعذّر تسليم طرد موجّه إليك. أكّد مكان التسليم وسيعيد المندوب المحاولة خلال 24 ساعة.",
+      "cta": "تأكيد موقع التسليم"
+    }
+  }
+}

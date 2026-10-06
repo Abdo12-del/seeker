@@ -1,239 +1,180 @@
-<p align="center"><img src="https://i.imgur.com/DIpuNTI.jpg"></p>
+<p align="center"><b>Seeker — Awareness Edition</b></p>
 
 <p align="center">
-    <a href="https://twitter.com/thewhiteh4t">
-      <img src="https://img.shields.io/badge/-TWITTER-black?logo=twitter&style=for-the-badge">
-    </a>
-    &nbsp;
-    <a href="https://twc1rcle.com/">
-      <img src="https://img.shields.io/badge/-THE WHITE CIRCLE-black?logo=&style=for-the-badge">
-    </a>
-    &nbsp;
-    <a href="https://thewhiteh4t.github.io/">
-      <img src="https://img.shields.io/badge/-BLOG-black?logo=dialogflow&style=for-the-badge">
-    </a>
+  منصة <b>محاكاة توعية أمنية مصرّحة</b> + <b>محرك تدقيق صفحات استغلال الموقع</b>.<br>
+  Authorized phishing-simulation platform &amp; deceptive-location page auditor.
 </p>
 
-<p align="center">
-  <br>
-  <b>Available in</b>
-  <br>
-  <img src="https://i.imgur.com/1wJVDV5.png">
-</p>
+---
 
-<p>
-  <a style="margin-right: 10px;" href="https://github.com/thewhiteh4t/seeker#installation">
-    <img src="https://dabuttonfactory.com/button.png?t=INSTALL&f=Open+Sans&ts=15&tc=000&hp=25&vp=10&c=5&bgt=unicolored&bgc=00e2ff">
-  </a>
-  <a style="margin-right: 10px;" href="https://github.com/thewhiteh4t/seeker#usage">
-    <img src="https://dabuttonfactory.com/button.png?t=USAGE&f=Open+Sans&ts=15&tc=000&hp=25&vp=10&c=5&bgt=unicolored&bgc=00e2ff">
-  </a>
-  <a href="https://github.com/thewhiteh4t/seeker#demo">
-    <img src="https://dabuttonfactory.com/button.png?t=DEMO&f=Open+Sans&ts=15&tc=000&hp=25&vp=10&c=5&bgt=unicolored&bgc=00e2ff">
-  </a>
-</p>
-
-Concept behind Seeker is simple, just like we host phishing pages to get credentials why not host a fake page that requests your location like many popular location based websites. Read more on <a href="https://thewhiteh4t.github.io"> thewhiteh4t's Blog </a>.Seeker Hosts a fake website which asks for Location Permission and if the target allows it, we can get :
-
-* Longitude
-* Latitude
-* Accuracy
-* Altitude - Not always available
-* Direction - Only available if user is moving
-* Speed - Only available if user is moving
-
-Along with Location Information we also get **Device Information** without any permissions :
-
-* Unique ID using Canvas Fingerprinting
-* Device Model - Not always available
-* Operating System
-* Platform
-* Number of CPU Cores - Approximate Results
-* Amount of RAM - Approximate Results
-* Screen Resolution
-* GPU information
-* Browser Name and Version
-* Public IP Address
-* Local IP Address
-* Local Port
-
-**Automatic IP Address Reconnaissance** is performed after the above information is received.
-
-**This tool is a Proof of Concept and is for Educational Purposes Only, Seeker shows what data a malicious website can gather about you and your devices and why you should not click on random links and allow critical permissions such as Location etc.**
-
-## How is this Different from IP GeoLocation
-
-* Other tools and services offer IP Geolocation which is NOT accurate at all and does not give location of the target instead it is the approximate location of the ISP.
-
-* Seeker uses HTML API and gets Location Permission and then grabs Longitude and Latitude using GPS Hardware which is present in the device, so Seeker works best with Smartphones, if the GPS Hardware is not present, such as on a Laptop, Seeker fallbacks to IP Geolocation or it will look for Cached Coordinates.  
-
-* Generally if a user accepts location permission, Accuracy of the information received is **accurate to approximately 30 meters**
-
-* Accuracy depends on multiple factors which you may or may not control such as :
-  * Device - Won't work on laptops or phones which have broken GPS
-  * Browser - Some browsers block javascripts
-  * GPS Calibration - If GPS is not calibrated you may get inaccurate results and this is very common
-
-## Templates
-
-Available Templates : 
-
-* NearYou
-* Google Drive (Suggested by @Akaal_no_one)
-* WhatsApp (Suggested by @Dazmed707)
-* Telegram
-* Zoom (Made by @a7maadf)
-* Google reCAPTCHA (Made by @MrEgyptian)
-
-Create your own template ! 
-Steps to let you create your template is described in this [how-to](./createTemplate.md)
-
-Once your template is ready, **do not forget to propose it to the community via a PR (pull request)**
-
-## Tested On :
-
-* Kali Linux
-* BlackArch Linux
-* Ubuntu
-* Fedora
-* Kali Nethunter
-* Termux
-* Parrot OS
-* OSX - Monterey v.12.0.1
-
-## Installation
-
-### Kali Linux / Arch Linux / Ubuntu / Fedora / Parrot OS / Termux
+## English quick start
 
 ```bash
-git clone https://github.com/thewhiteh4t/seeker.git
-cd seeker/
-chmod +x install.sh
-./install.sh
+python3 seeker.py doctor                 # sanity check (no pip install needed)
+python3 seeker.py serve --token demo1234 # console on http://127.0.0.1:8080/console
+python3 seeker.py analyze https://example.com/page   # audit a page
+python3 -m unittest discover -s tests    # 42 tests, zero dependencies
 ```
 
-### BlackArch Linux
+Everything runs on the Python standard library (3.8+). PHP is no longer required.
+
+---
+
+# العربية
+
+## ما الذي تغيّر؟ (v1 → v2)
+
+النسخة الأصلية (`thewhiteh4t/seeker`) كانت: صفحات PHP + ملفّين نصيين (`info.txt` و
+`result.txt`) تقرأهما بايثون كل ثانيتين. الفكرة كانت «استضافة صفحة تطلب صلاحية
+الموقع وأخذ الإحداثيات». النسخة 2 تعالج جذور المشكلة التقنية **وتغيّر الغرض**:
+
+| | v1 | v2 |
+|---|---|---|
+| الغرض | جمع موقع شخص | **قياس** مدى قابلية فريق لمشاركة موقعه، وتدقيقه |
+| التشغيل | PHP + بايثون | **بايثون وحدها** (مكتبة قياسية فقط) |
+| التخزين | ملفّان نصيان + CSV | **SQLite** بسجل أحداث متسلسل بالهاش (tamper-evident) |
+| تعدد الزوّار | ❌ تُربط بيانات شخص بمكان شخص آخر | ✅ كل حدث له `session_id` و`rid` |
+| الموافقة | ❌ نافذة المتصفح فقط | ✅ **إشعار موافقة معلن + سجل موافقة موقّع** |
+| الصلاحية | ❌ من يملك السكربت ينفّذه | ✅ **بوابة تصريح**: مُصرّح + نطاق + مدة + توقيع |
+| تقليل البيانات | ❌ إحداثيات خام كاملة | ✅ سياسة دقة (`geohash` افتراضيًا) + مدة احتفاظ |
+| النتيجة | إحداثيات + بيانات جهاز | **قمع محاكاة**: فتح / وافق / رفض / أبلغ |
+| دفاعي | ❌ | ✅ `seeker analyze` يكشف الصفحات الخادعة |
+| اختبارات | ❌ | ✅ 42 اختبارًا + CI |
+
+### أخطاء حقيقية أُصلحت (كانت موجودة في v1)
+
+* `logs/info.txt` يُفتح بـ `w+` وكذلك `result.txt` — أي زائرين في نفس الوقت
+  يكتب كل منهما فوق الآخر، وقد تُنسب إحداثيات (أ) لجهاز (ب). في v2 كل حدث
+  موسوم بـ `session_id` ويُخزَّن في جدول واحد.
+* `maximumage: 0` في `js/location.js` — الخاصية الصحيحة `maximumAge` (حسّاسة
+  لحالة الأحرف)، لذلك كان الخيار يُتجاهل بصمت.
+* `re.sub(r'\33\[\d+m', ...)` في `utils.py` — يتعطل بـ `re.error` عند توجيه
+  الخرج إلى أنبوب (`|`) لأن `\33` تُفسَّر كرجوع لمجموعة. **v1 كان ينهار عند
+  `python3 seeker.py | tee log`**.
+* `-d/--debugHTTP` معرّف كـ `type=bool` — أي نص غير فارغ يصبح `True`.
+* معالجات PHP تقرأ `$_POST[...]` بدون تحقق: أول حقل ناقص يُنذر والملف يُكتب
+  نصف JSON فينهار المحلّل.
+* لا يوجد ربط بين «مَن فتح» و«مَن شارك» — لا توجد هوية جلسة أصلًا.
+
+## الفكرة الفريدة
+
+بدل أن تكون الأداة «طرف مهاجم فقط»، صارت **طرفي المعادلة**:
+
+1. **وضع المحاكاة المصرّحة** — تقيس السلوك، لا تُنتج ملفًّا عن شخص.
+2. **وضع التدقيق الدفاعي** — تحلّل أي صفحة (رابط أو HTML) وتقول لك إن كانت
+   تطلب الموقع بشكل خادع، مع الدليل والتوصية.
+
+ثلاثة أشياء لا تملكها أدوات هذا النوع مجتمعة:
+
+* **بوابة تصريح (Authorization Gate):** لا تُخدَّم أي صفحة قبل وجود سجل موقّع
+  يذكر المُصرّح (شخص بعينه) والنطاق والسبب وتاريخ الانتهاء. عند انتهاء المدة أو
+  إيقاف الحملة ترجع الصفحة `403` ولا يُطلب الموقع أبدًا.
+* **سجل الموافقة (Consent Ledger):** قبل رفع نافذة الصلاحية يظهر إشعار مقروء
+  يذكر مَن يطلب ولماذا وكم تُحفظ البيانات، بلغة الزائر. القرار + نص الإشعار +
+  هاشه + توقيع HMAC تُحفظ في سجل مستقل. الرفض يُسجَّل **كنتيجة إيجابية**.
+* **تقليل البيانات كسياسة قابلة للتدقيق:** الإحداثيات تُخفَّض دقتها *قبل*
+  التخزين لا بعده. الافتراضي `geohash` (~5 كم). تصدير KML لا يمكنه إنتاج دقة
+  أعلى ممّا خُزِّن.
+
+## التشغيل
 
 ```bash
-sudo pacman -S seeker
+# 1) تشغيل الخادم واللوحة
+python3 seeker.py serve --port 8080 --token <رمز> \
+    --org "فريق التوعية الأمنية" --contact soc@example.org
+
+# 2) إنشاء حملة (لا تعمل بدون مُصرّح ونطاق)
+python3 seeker.py campaign create \
+    --name "خط الأساس الربع الرابع" \
+    --scenario delivery \
+    --authorizer "مدير مركز العمليات" \
+    --scope "فريق المالية، 40 شخصًا" \
+    --links 40 --group finance
+
+# 3) النتائج
+python3 seeker.py report <campaign-id>
+python3 seeker.py export <campaign-id> -f html -o report.html
+
+# 4) التدقيق الدفاعي
+python3 seeker.py analyze https://example.com/tracking-page
+python3 seeker.py analyze ./suspicious.html
+
+# 5) التحقق من سلامة السجل
+python3 seeker.py ledger verify
 ```
 
-### Docker
+## السيناريوهات
+
+سيناريوهات مضمّنة **without أي علامة تجارية حقيقية**: `delivery` (توصيل)،
+`wifi` (شبكات قريبة)، `offers` (عروض)، `survey` (مجموعة ضابطة — صفحة تُصرّح
+من البداية أنها تمرين). إضافة سيناريو = مجلد فيه `manifest.json`:
+
+```json
+{
+  "id": "delivery",
+  "name": "Delivery confirmation",
+  "icon": "📦", "accent": "#0f766e",
+  "requires_brand_authorization": false,
+  "content": {
+    "ar": {"title": "…", "headline": "…", "sub": "…", "cta": "…"},
+    "en": {"title": "…", "headline": "…", "sub": "…", "cta": "…"}
+  }
+}
+```
+
+السيناريو الذي يقلّد علامة تجارية يجب أن يضبط
+`requires_brand_authorization: true`، وحينها **ترفض المنصة عرضه** ما لم يحمل
+سجل الحملة ترخيصًا موقّعًا باسم تلك العلامة.
+
+## واجهة الويب
+
+`http://HOST:8080/console` (تحتاج الرمز):
+
+* **الحملات**: إنشاء، روابط تتبّع، إيقاف/تشغيل، تصدير CSV/JSON/KML/HTML، قمع
+  محاكاة لكل حملة.
+* **الأحداث المباشرة**: تدفق SSE لحظي لكل نقرة وقرار وإبلاغ.
+* **تدقيق الصفحات**: لصق HTML أو رابط → درجة خطورة + ملاحظات بالدليل + توصيات.
+* **النزاهة**: حالة سلسلة الهاش، صحة تواقيع الموافقة، أرقام المجموعات،
+  سياسة تقليل البيانات الفعّالة.
+
+## API
+
+كل مسارات `/api/*` تحتاج `Authorization: Bearer <token>` (أو `?token=`).
+
+| المسار | الوصف |
+|---|---|
+| `GET /api/state` | الحملات + القمع + المجموعات + آخر الأحداث |
+| `GET /api/stream` | SSE للأحداث الحية |
+| `POST /api/campaigns` | إنشاء حملة (ي require `authorizer` و`scope`) |
+| `POST /api/campaigns/<id>/status` | `active` / `stopped` |
+| `GET /api/campaigns/<id>/links` | روابط التتبّع |
+| `GET /api/campaigns/<id>/export?format=` | `csv` `json` `kml` `html` |
+| `DELETE /api/campaigns/<id>` | حذف الحملة وكل بياناتها |
+| `POST /api/analyze` | `{url}` أو `{html}` |
+| `GET /api/chain` | التحقق من سلسلة الأحداث وتواقيع الموافقة |
+
+مسارات عامة (للزائر): `GET /l/<token>`، `POST /ingest/{device,open,consent_prompt,consent,location,error,report,reveal}`.
+
+## التشغيل في Docker
 
 ```bash
-docker pull thewhiteh4t/seeker
+docker compose up --build
+# ثم: http://localhost:8080/console
 ```
 
-### OSX
-```bash
-git clone https://github.com/thewhiteh4t/seeker.git
-cd seeker/
-python3 seeker.py
-````
+## الأخلاقيات والقانون
 
-In order to run in tunnel mode, install ngrok by running this command in the terminal:
-```bash
-brew install ngrok/ngrok/ngrok
+راجع [`docs/ETHICS.md`](docs/ETHICS.md). باختصار: المحاكاة أداة تدريب تحتاج
+تفويضًا كتابيًا من صاحب المنظمة، ونطاقًا محددًا، وإشعارًا صادقًا، وتقليلًا
+للبيانات. المنصة **تفرض** هذه الشروط تقنيًا (بوابة التصريح + سجل الموافقة) بدل
+أن تكتفي بطلبها.
 
-ngrok http 8080
-````
+## الملفات القديمة
 
-## Usage
+نسخة 1 محفوظة كما هي في `legacy/` ويمكن تشغيلها بـ `python3 legacy/seeker_v1.py`
+(تحتاج PHP). مجلد `template/` (صفحات Google Drive / WhatsApp / Telegram…)
+**غير مستخدم** في المحرك الجديد ولا يُخدَّم افتراضيًا.
 
-```bash
-python3 seeker.py -h
+## الترخيص
 
-usage: seeker.py [-h] [-k KML] [-p PORT] [-u] [-v] [-t TEMPLATE] [-d] [--telegram token:chatId] [--webhook WEBHOOK]
-
-options:
-  -h, --help                            show this help message and exit
-  -k KML, --kml KML                     KML filename
-  -p PORT, --port PORT                  Web server port [ Default : 8080 ]
-  -u, --update                          Check for updates
-  -v, --version                         Prints version
-  -t TEMPLATE, --template TEMPLATE      Auto choose the template with the given index
-  -d, --debugHTTP                       Disable auto http --> https redirection for testing purposes 
-                                        (only works for the templates having index_temp.html file)
-  --telegram                            Send info to a telegram bot, provide telegram token and chat to use
-                                        format = token:chatId separated by a colon
-  --webhook                             Send events to a webhook endpoint to be processed
-                                        Note : endpoint must be unauthenticated and accept POST request
-
-#########################
-# Environment Variables #
-#########################
-
-Some of the options above can also be enabled via environment variables, to ease deployment.
-Other parameters can be provided via environment variables to avoid interactive mode.
-
-Variables:
-  DEBUG_HTTP            Same as -d, --debugHTTP
-  PORT                  Same as -p, --port
-  TEMPLATE              Same as -t, --template
-  TITLE                 Provide the group title or the page title
-  REDIRECT              Provide the URL to redirect the user to, after the job is done
-  IMAGE                 Provide the image to use, can either be remote (http or https) or local
-                        Note : Remote image will be downloaded locally during the startup
-  DESC                  Provide the description of the item (group or webpage depending on the template)
-  SITENAME              Provide the name of the website
-  DISPLAY_URL           Provide the URL to display on the page
-  MEM_NUM               Provide the number of group membres (Telegram so far)
-  ONLINE_NUM            Provide the number of the group online members (Telegram so far)
-  TELEGRAM              Provide telegram token and chat to use to send info to a telegram bot
-                        format = token:chatId separated by a colon
-  WEBHOOK               Provide the webhook url to forward the events to 
-                        Note : endpoint should be unauthenticated and accept POST method
-                        
-
-##################
-# Usage Examples #
-##################
-
-# Step 1 : In first terminal
-$ python3 seeker.py
-
-# Step 2 : In second terminal start a tunnel service such as ngrok
-$ ./ngrok http 8080
-
-###########
-# Options #
-###########
-
-# Ouput KML File for Google Earth
-$ python3 seeker.py -k <filename>
-
-# Use Custom Port
-$ python3 seeker.py -p 1337
-$ ./ngrok http 1337
-
-# Pre-select a specific template
-$ python3 seeker.py -t 1
-
-################
-# Docker Usage #
-################
-
-# Step 1
-$ docker network create ngroknet
-
-# Step 2
-$ docker run --rm -it --net ngroknet --name seeker thewhiteh4t/seeker
-
-# Step 3
-$ docker run --rm -it --net ngroknet --name ngrok wernight/ngrok ngrok http seeker:8080
-```
-
-## Local Tunnels
-Use
-```
-ssh -R 80:localhost:8080 nokey@localhost.run
-```
-as an alternative to ngrok
-
-## Demo
-
-**YouTube**
-
-<a href="https://odysee.com/@thewhiteh4t:2/seeker_v126_demo:e">
-  <img src="https://thumbnails.odycdn.com/optimize/s:1024:768/quality:85/plain/https://thumbs.odycdn.com/5ce9ed06e0ce8a995987dba0949dbc9a.webp">
-</a>
+MIT — انظر `LICENSE`. المشروع الأصلي: <https://github.com/thewhiteh4t/seeker>

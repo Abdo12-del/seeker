@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Seeker · console</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="locked">
+
+<div id="gate" class="gate">
+  <form id="gateForm" class="gate-card">
+    <h1 id="gateTitle">Seeker</h1>
+    <p id="gateHint" class="muted">أدخل رمز API المعروض عند تشغيل الخادم.</p>
+    <input id="gateToken" type="password" autocomplete="off" placeholder="token" required>
+    <button class="primary" type="submit">دخول</button>
+    <p id="gateError" class="error"></p>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <b>Seeker</b>
+      <span class="muted" id="orgLabel"></span>
+    </div>
+    <nav>
+      <button data-tab="campaigns" class="tab active"></button>
+      <button data-tab="live" class="tab"></button>
+      <button data-tab="audit" class="tab"></button>
+      <button data-tab="integrity" class="tab"></button>
+    </nav>
+    <div class="actions">
+      <button id="langBtn" class="ghost small"></button>
+      <button id="lockBtn" class="ghost small"></button>
+    </div>
+  </header>
+
+  <main>
+    <section id="tab-campaigns" class="tab-body">
+      <div class="stats" id="stats"></div>
+
+      <div class="panel">
+        <h2 id="newTitle"></h2>
+        <form id="campaignForm" class="form">
+          <label><span class="lbl"></span><input name="name" required></label>
+          <label><span class="lbl"></span><select name="scenario" id="scenarioSelect"></select></label>
+          <label><span class="lbl"></span><input name="authorizer" required></label>
+          <label><span class="lbl"></span><input name="scope" required></label>
+          <label><span class="lbl"></span><input name="group" value="default"></label>
+          <label><span class="lbl"></span><input name="links" type="number" min="1" max="500" value="5"></label>
+          <label><span class="lbl"></span><input name="duration_days" type="number" min="1" max="365" value="7"></label>
+          <div class="full"><button class="primary" type="submit" id="createBtn"></button></div>
+        </form>
+        <p class="fineprint" id="authzNote"></p>
+      </div>
+
+      <div id="campaignList" class="list"></div>
+    </section>
+
+    <section id="tab-live" class="tab-body" hidden>
+      <div class="panel">
+        <h2 id="liveTitle"></h2>
+        <div id="liveFeed" class="feed"></div>
+      </div>
+    </section>
+
+    <section id="tab-audit" class="tab-body" hidden>
+      <div class="panel">
+        <h2 id="auditTitle"></h2>
+        <p class="muted" id="auditHint"></p>
+        <textarea id="auditInput" rows="10" spellcheck="false"></textarea>
+        <div class="row">
+          <input id="auditUrl" type="url" placeholder="https://example.com/page">
+          <button class="primary" id="auditBtn"></button>
+        </div>
+        <div id="auditResult"></div>
+        <h3 id="auditHistory"></h3>
+        <div id="auditList" class="feed"></div>
+      </div>
+    </section>
+
+    <section id="tab-integrity" class="tab-body" hidden>
+      <div class="panel">
+        <h2 id="integrityTitle"></h2>
+        <div id="integrityBox" class="feed"></div>
+        <h3 id="groupsTitle"></h3>
+        <div id="groupsBox"></div>
+        <h3 id="privacyTitle"></h3>
+        <div id="privacyBox" class="feed"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

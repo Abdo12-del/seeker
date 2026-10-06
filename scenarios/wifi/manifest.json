@@ -1,0 +1,22 @@
+{
+  "id": "wifi",
+  "name": "Free Wi-Fi finder",
+  "icon": "📶",
+  "accent": "#1d4ed8",
+  "description": "Finds open hotspots nearby. A location request that sounds obviously reasonable — which is the point.",
+  "requires_brand_authorization": false,
+  "content": {
+    "en": {
+      "title": "Free Wi-Fi near you",
+      "headline": "Find open networks nearby",
+      "sub": "We will show the three closest open access points with the best signal. This needs your approximate location.",
+      "cta": "Find networks near me"
+    },
+    "ar": {
+      "title": "شبكات Wi-Fi قريبة",
+      "headline": "اعثر على شبكات مفتوحة قربك",
+      "sub": "سنعرض أقرب ثلاث شبكات مفتوحة بأفضل إشارة. يحتاج هذا إلى موقعك التقريبي.",
+      "cta": "ابحث عن شبكات قريبة"
+    }
+  }
+}
